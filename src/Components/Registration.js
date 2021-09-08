@@ -2,20 +2,22 @@ import "../styles/reset.css";
 import styled from "styled-components";
 import logo from "../images/trackit-logo.png";
 
-export default function Registration () {
-    return(<Container>
-        <Logo>
-          <img src={logo} alt="logo" />
-        </Logo>
-        <Inputs>
-          <Email placeholder="e-mail" type="text"></Email>
-          <Password placeholder="senha" type="password"></Password>
-          <Name placeholder="nome" type="text"></Name>
-          <Photo placeholder="foto" type="text"></Photo>
-          <RegisterButton>Cadastrar</RegisterButton>
-          <ToLogin>Já tem uma conta? Faça login!</ToLogin>
-        </Inputs>
-      </Container>);
+export default function Registration() {
+  return (
+    <Container>
+      <Logo>
+        <img src={logo} alt="logo" />
+      </Logo>
+      <Inputs>
+        <Email placeholder="e-mail" type="text"></Email>
+        <Password placeholder="senha" type="password"></Password>
+        <Name placeholder="nome" type="text"></Name>
+        <Photo placeholder="foto" type="text"></Photo>
+        <RegisterButton>Cadastrar</RegisterButton>
+        <ToLogin>Já tem uma conta? Faça login!</ToLogin>
+      </Inputs>
+    </Container>
+  );
 }
 
 //--------- Styled-Components----------
