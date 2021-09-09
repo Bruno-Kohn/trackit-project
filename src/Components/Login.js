@@ -4,13 +4,16 @@ import logo from "../images/trackit-logo.png";
 import { Link, useHistory } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import Loader from "react-loader-spinner";
 
-export default function Login({setUser}) {
+export default function Login({ setUser }) {
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [clicked, setClicked] = useState(false);
 
   function login() {
+    setClicked(true);
     const body = {
       email,
       password,
@@ -28,6 +31,9 @@ export default function Login({setUser}) {
     });
     req.catch((error) => {
       console.log(error);
+      setEmail("");
+      setPassword("");
+      setClicked(false);
       alert("Dado(s) preenchido(s) de forma incorreta. Tente novamente.");
     });
   }
@@ -43,14 +49,22 @@ export default function Login({setUser}) {
           type="text"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          disabled={clicked}
         ></Email>
         <Password
           placeholder="senha"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          disabled={clicked}
         ></Password>
-        <LoginButton onClick={login}>Entrar</LoginButton>
+        <LoginButton onClick={login} disabled={clicked}>
+          {clicked === false ? (
+            "Entrar"
+          ) : (
+            <Loader type="ThreeDots" color="#FFFFFF" height={45} width={60} />
+          )}
+        </LoginButton>
         <Link to="/cadastro">
           <ToCreateAccount>Não tem uma conta? Cadastre-se!</ToCreateAccount>
         </Link>
@@ -84,26 +98,33 @@ const Email = styled.input`
   margin-top: 2vh;
   width: 100%;
   height: 45px;
-  background: #ffffff;
+  background: ${props => props.disabled ? "#f2f2f2" : "#ffffff"};
   border: 1px solid #d5d5d5;
   border-radius: 5px;
-  color: #dbdbdb;
+  color: #515151;
   font-size: 18px;
   font-family: "Lexend Deca", sans-serif;
   padding-left: 12px;
+
+  ::placeholder {
+    color: #666666;
+  }
 `;
 
 const Password = styled.input`
   margin-top: 5px;
   width: 100%;
   height: 45px;
-  background: #ffffff;
+  background: ${props => props.disabled ? "#f2f2f2" : "#ffffff"};
   border: 1px solid #d5d5d5;
   border-radius: 5px;
-  color: #dbdbdb;
+  color: #515151;
   font-size: 18px;
   font-family: "Lexend Deca", sans-serif;
   padding-left: 12px;
+  ::placeholder {
+    color: #666666;
+  }
 `;
 
 const LoginButton = styled.button`
@@ -111,11 +132,13 @@ const LoginButton = styled.button`
   width: 100%;
   height: 45px;
   background: #52b6ff;
+  opacity: ${props => props.disabled ? 0.7 : 1};
   border-radius: 4.63636px;
   border: none;
   color: #fff;
   font-family: "Lexend Deca", sans-serif;
   font-size: 21px;
+  cursor: pointer;
 `;
 
 const ToCreateAccount = styled.div`
