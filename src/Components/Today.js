@@ -1,19 +1,61 @@
 import "../styles/reset.css";
 import styled from "styled-components";
 import { FaCheck } from "react-icons/fa";
+import axios from "axios";
+import { useState, useEffect, useContext } from "react";
+import UserContext from "../contexts/UserContext";
+import { Link } from "react-router-dom";
 
 export default function Today() {
+  const [habits, setHabits] = useState([]);
+  const user = useContext(UserContext);
+
+  useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    const req = axios.get(
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today",
+      config
+    );
+
+    req.then((resp) => {
+      setHabits(resp.data);
+    });
+
+    req.catch((error) => console.log(error));
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <Container>
       <Top>
         <LogoName>TrackIt</LogoName>
-        <ProfileImage></ProfileImage>
+        <ProfileImage>
+          <img src={user.image} alt="" />
+        </ProfileImage>
       </Top>
       <Content>
         <TopContent>
           <Date>Segunda, 17/05</Date>
           <HabitsDone>33% dos hábitos concluidos</HabitsDone>
         </TopContent>
+        {habits.map((i) => (
+          <HabitsDisplay>
+            <HabitsInfos>
+              <HabitsName>Ler 1 capitulo de livro</HabitsName>
+              <HabitsSequence>Sequencia atual: 4 dias</HabitsSequence>
+              <HabitsRecord>Seu recorde: 5 dias</HabitsRecord>
+            </HabitsInfos>
+            <HabitsButton>
+              <CheckButton>
+                <FaCheck />
+              </CheckButton>
+            </HabitsButton>
+          </HabitsDisplay>
+        ))}
         <HabitsDisplay>
           <HabitsInfos>
             <HabitsName>Ler 1 capitulo de livro</HabitsName>
@@ -52,9 +94,15 @@ export default function Today() {
         </HabitsDisplay>
       </Content>
       <Bottom>
-        <HabitsLink>Hábitos</HabitsLink>
-        <CircularProgressBar>Hoje</CircularProgressBar>
-        <RecordsLink>Histórico</RecordsLink>
+        <Link to="/habitos">
+          <HabitsLink>Hábitos</HabitsLink>
+        </Link>
+        <Link to="/hoje">
+          <CircularProgressBar>Hoje</CircularProgressBar>
+        </Link>
+        <Link to="/historico">
+          <RecordsLink>Histórico</RecordsLink>
+        </Link>
       </Bottom>
     </Container>
   );
@@ -94,6 +142,12 @@ const ProfileImage = styled.div`
   border-radius: 50px;
   width: 51px;
   height: 51px;
+
+  img {
+    border-radius: 50px;
+    width: 51px;
+    height: 51px;
+  }
 `;
 
 const Content = styled.div`

@@ -1,18 +1,22 @@
 import ReactDOM from "react-dom";
-import { BrowserRouter, Switch, Route} from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Login from "./Components/Login";
 import Registration from "./Components/Registration";
 import Habits from "./Components/Habits";
 import Today from "./Components/Today";
 import Records from "./Components/Records";
 import "./styles/reset.css";
+import UserContext from "./contexts/UserContext";
+import { useState } from "react";
 
 function App() {
+  const [user, setUser] = useState(null);
   return (
+    <UserContext.Provider value={user}>
       <BrowserRouter>
         <Switch>
           <Route path="/" exact>
-            <Login />
+            <Login setUser={setUser}/>
           </Route>
           <Route path="/cadastro" exact>
             <Registration />
@@ -28,6 +32,7 @@ function App() {
           </Route>
         </Switch>
       </BrowserRouter>
+    </UserContext.Provider>
   );
 }
 

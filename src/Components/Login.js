@@ -5,7 +5,7 @@ import { Link, useHistory } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
-export default function Login() {
+export default function Login({setUser}) {
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +23,7 @@ export default function Login() {
 
     req.then((resp) => {
       console.log(resp.data);
+      setUser(resp.data);
       history.push("/hoje");
     });
     req.catch((error) => {

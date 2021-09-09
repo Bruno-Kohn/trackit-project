@@ -1,13 +1,19 @@
 import "../styles/reset.css";
 import styled from "styled-components";
 import { FaTrashAlt } from "react-icons/fa";
+import UserContext from "../contexts/UserContext";
+import { useContext } from "react";
+import { Link } from "react-router-dom";
 
 export default function Habits() {
+  const user = useContext(UserContext);
   return (
     <Container>
       <Top>
         <LogoName>TrackIt</LogoName>
-        <ProfileImage></ProfileImage>
+        <ProfileImage>
+          <img src={user.image} alt="" />
+        </ProfileImage>
       </Top>
       <Content>
         <MyHabits>
@@ -53,9 +59,15 @@ export default function Habits() {
         </NoHabitsAdded>
       </Content>
       <Bottom>
-        <HabitsLink>Hábitos</HabitsLink>
-        <CircularProgressBar>Hoje</CircularProgressBar>
-        <RecordsLink>Histórico</RecordsLink>
+        <Link to="/habitos">
+          <HabitsLink>Hábitos</HabitsLink>
+        </Link>
+        <Link to="/hoje">
+          <CircularProgressBar>Hoje</CircularProgressBar>
+        </Link>
+        <Link to="/historico">
+          <RecordsLink>Histórico</RecordsLink>
+        </Link>
       </Bottom>
     </Container>
   );
@@ -95,6 +107,12 @@ const ProfileImage = styled.div`
   border-radius: 50px;
   width: 51px;
   height: 51px;
+
+  img {
+    border-radius: 50px;
+    width: 51px;
+    height: 51px;
+  }
 `;
 
 const Content = styled.div`
@@ -252,7 +270,7 @@ const NoHabitsAdded = styled.div`
 const Bottom = styled.div`
   width: 100%;
   height: 70px;
-  background-color: #FFF;
+  background-color: #fff;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -279,7 +297,7 @@ const CircularProgressBar = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #FFF;
+  color: #fff;
 `;
 
 const RecordsLink = styled.div`

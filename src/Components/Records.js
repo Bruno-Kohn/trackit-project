@@ -1,21 +1,35 @@
 import "../styles/reset.css";
 import styled from "styled-components";
+import { useContext } from "react";
+import UserContext from "../contexts/UserContext";
+import { Link } from "react-router-dom";
 
 export default function Records() {
+  const user = useContext(UserContext);
   return (
     <Container>
       <Top>
         <LogoName>TrackIt</LogoName>
-        <ProfileImage></ProfileImage>
+        <ProfileImage>
+          <img src={user.image} alt="" />
+        </ProfileImage>
       </Top>
       <Content>
         <RouteName>Histórico</RouteName>
-        <RecordsMessage>Em breve você poderá ver o histórico dos seus hábitos aqui!</RecordsMessage>
+        <RecordsMessage>
+          Em breve você poderá ver o histórico dos seus hábitos aqui!
+        </RecordsMessage>
       </Content>
       <Bottom>
-        <HabitsLink>Hábitos</HabitsLink>
-        <CircularProgressBar>Hoje</CircularProgressBar>
-        <RecordsLink>Histórico</RecordsLink>
+        <Link to="/habitos">
+          <HabitsLink>Hábitos</HabitsLink>
+        </Link>
+        <Link to="/hoje">
+          <CircularProgressBar>Hoje</CircularProgressBar>
+        </Link>
+        <Link to="/historico">
+          <RecordsLink>Histórico</RecordsLink>
+        </Link>
       </Bottom>
     </Container>
   );
@@ -55,6 +69,12 @@ const ProfileImage = styled.div`
   border-radius: 50px;
   width: 51px;
   height: 51px;
+
+  img {
+    border-radius: 50px;
+    width: 51px;
+    height: 51px;
+  }
 `;
 
 const Content = styled.div`
@@ -64,17 +84,17 @@ const Content = styled.div`
 `;
 
 const RouteName = styled.div`
-width: 100%;
-height: 40px;
-font-size: 23px;
-color: #126ba5;
+  width: 100%;
+  height: 40px;
+  font-size: 23px;
+  color: #126ba5;
 `;
 
 const RecordsMessage = styled.div`
-width: 100%;
-height: 100px;
-font-size: 18px;
-color: #666666;
+  width: 100%;
+  height: 100px;
+  font-size: 18px;
+  color: #666666;
 `;
 
 const Bottom = styled.div`
