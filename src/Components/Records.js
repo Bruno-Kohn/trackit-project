@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { useContext } from "react";
 import UserContext from "../contexts/UserContext";
 import { Link } from "react-router-dom";
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
 export default function Records() {
   const user = useContext(UserContext);
@@ -25,7 +27,9 @@ export default function Records() {
           <HabitsLink>Hábitos</HabitsLink>
         </Link>
         <Link to="/hoje">
-          <CircularProgressBar>Hoje</CircularProgressBar>
+          <CircularProgressBar>
+            <CircularProgressbar value="35" text="Hoje" />
+          </CircularProgressBar>
         </Link>
         <Link to="/historico">
           <RecordsLink>Histórico</RecordsLink>

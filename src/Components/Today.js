@@ -5,6 +5,8 @@ import axios from "axios";
 import { useState, useEffect, useContext } from "react";
 import UserContext from "../contexts/UserContext";
 import { Link } from "react-router-dom";
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
 export default function Today() {
   const [habits, setHabits] = useState([]);
@@ -98,7 +100,9 @@ export default function Today() {
           <HabitsLink>Hábitos</HabitsLink>
         </Link>
         <Link to="/hoje">
-          <CircularProgressBar>Hoje</CircularProgressBar>
+          <CircularProgressBar>
+            <CircularProgressbar value="35" text="Hoje" />
+          </CircularProgressBar>
         </Link>
         <Link to="/historico">
           <RecordsLink>Histórico</RecordsLink>

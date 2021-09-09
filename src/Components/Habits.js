@@ -4,6 +4,8 @@ import { FaTrashAlt } from "react-icons/fa";
 import UserContext from "../contexts/UserContext";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
 export default function Habits() {
   const user = useContext(UserContext);
@@ -63,7 +65,9 @@ export default function Habits() {
           <HabitsLink>Hábitos</HabitsLink>
         </Link>
         <Link to="/hoje">
-          <CircularProgressBar>Hoje</CircularProgressBar>
+          <CircularProgressBar>
+            <CircularProgressbar value="35" text="Hoje" />
+          </CircularProgressBar>
         </Link>
         <Link to="/historico">
           <RecordsLink>Histórico</RecordsLink>
