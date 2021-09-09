@@ -1,20 +1,71 @@
 import "../styles/reset.css";
 import styled from "styled-components";
 import logo from "../images/trackit-logo.png";
+import { Link, useHistory } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
 export default function Registration() {
+  const history = useHistory();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("");
+
+  function registerUser() {
+    const body = {
+      email,
+      name,
+      image,
+      password,
+    };
+
+    const req = axios.post(
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up",
+      body
+    );
+
+    req.then((resp) => history.push("/"));
+    req.catch((error) => {
+      console.log(error);
+      alert("Dado(s) preenchido(s) de forma incorreta. Tente novamente.");
+    });
+  }
+
   return (
     <Container>
       <Logo>
         <img src={logo} alt="logo" />
       </Logo>
       <Inputs>
-        <Email placeholder="e-mail" type="text"></Email>
-        <Password placeholder="senha" type="password"></Password>
-        <Name placeholder="nome" type="text"></Name>
-        <Photo placeholder="foto" type="text"></Photo>
-        <RegisterButton>Cadastrar</RegisterButton>
-        <ToLogin>Já tem uma conta? Faça login!</ToLogin>
+        <Email
+          placeholder="e-mail"
+          type="text"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        ></Email>
+        <Password
+          placeholder="senha"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        ></Password>
+        <Name
+          placeholder="nome"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        ></Name>
+        <Photo
+          placeholder="foto"
+          type="text"
+          value={image}
+          onChange={(e) => setImage(e.target.value)}
+        ></Photo>
+        <RegisterButton onClick={registerUser}>Cadastrar</RegisterButton>
+        <Link to="/">
+          <ToLogin>Já tem uma conta? Faça login!</ToLogin>
+        </Link>
       </Inputs>
     </Container>
   );

@@ -1,18 +1,58 @@
 import "../styles/reset.css";
 import styled from "styled-components";
 import logo from "../images/trackit-logo.png";
+import { Link, useHistory } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
 export default function Login() {
+  const history = useHistory();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  function login() {
+    const body = {
+      email,
+      password,
+    };
+
+    const req = axios.post(
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login",
+      body
+    );
+
+    req.then((resp) => {
+      console.log(resp.data);
+      history.push("/hoje");
+    });
+    req.catch((error) => {
+      console.log(error);
+      alert("Dado(s) preenchido(s) de forma incorreta. Tente novamente.");
+    });
+  }
+
   return (
     <Container>
       <Logo>
         <img src={logo} alt="logo" />
       </Logo>
       <Inputs>
-        <Email placeholder="e-mail" type="text"></Email>
-        <Password placeholder="senha" type="password"></Password>
-        <LoginButton>Entrar</LoginButton>
-        <ToCreateAccount>Não tem uma conta? Cadastre-se!</ToCreateAccount>
+        <Email
+          placeholder="e-mail"
+          type="text"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        ></Email>
+        <Password
+          placeholder="senha"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        ></Password>
+        <LoginButton onClick={login}>Entrar</LoginButton>
+        <Link to="/cadastro">
+          <ToCreateAccount>Não tem uma conta? Cadastre-se!</ToCreateAccount>
+        </Link>
       </Inputs>
     </Container>
   );
