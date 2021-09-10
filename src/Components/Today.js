@@ -4,9 +4,9 @@ import { FaCheck } from "react-icons/fa";
 import axios from "axios";
 import { useState, useEffect, useContext } from "react";
 import UserContext from "../contexts/UserContext";
-import { Link } from "react-router-dom";
-import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import Top from "./Top";
+import Bottom from "./Bottom";
 
 export default function Today() {
   const [habits, setHabits] = useState([]);
@@ -33,12 +33,7 @@ export default function Today() {
 
   return (
     <Container>
-      <Top>
-        <LogoName>TrackIt</LogoName>
-        <ProfileImage>
-          <img src={user.image} alt="" />
-        </ProfileImage>
-      </Top>
+      <Top />
       <Content>
         <TopContent>
           <Date>Segunda, 17/05</Date>
@@ -95,19 +90,7 @@ export default function Today() {
           </HabitsButton>
         </HabitsDisplay>
       </Content>
-      <Bottom>
-        <Link to="/habitos">
-          <HabitsLink>Hábitos</HabitsLink>
-        </Link>
-        <Link to="/hoje">
-          <CircularProgressBar>
-            <CircularProgressbar value="35" text="Hoje" />
-          </CircularProgressBar>
-        </Link>
-        <Link to="/historico">
-          <RecordsLink>Histórico</RecordsLink>
-        </Link>
-      </Bottom>
+      <Bottom />
     </Container>
   );
 }
@@ -119,39 +102,6 @@ const Container = styled.div`
   width: 100vw;
   background-color: #f2f2f2;
   padding-top: 70px;
-`;
-
-const Top = styled.div`
-  height: 70px;
-  background-color: #126ba5;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-`;
-
-const LogoName = styled.div`
-  font-family: "Playball", cursive;
-  font-size: 39px;
-  color: #fff;
-`;
-
-const ProfileImage = styled.div`
-  background-color: red;
-  border-radius: 50px;
-  width: 51px;
-  height: 51px;
-
-  img {
-    border-radius: 50px;
-    width: 51px;
-    height: 51px;
-  }
 `;
 
 const Content = styled.div`
@@ -244,42 +194,4 @@ const CheckButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const Bottom = styled.div`
-  width: 100%;
-  height: 70px;
-  background-color: #fff;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 45px;
-`;
-
-const HabitsLink = styled.div`
-  color: #52b6ff;
-  font-size: 18px;
-`;
-
-const CircularProgressBar = styled.div`
-  background-color: #52b6ff;
-  width: 91px;
-  height: 91px;
-  border-radius: 51px;
-  font-size: 18px;
-  position: fixed;
-  left: calc((100vw / 2) - (91px / 2));
-  bottom: 25px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #fff;
-`;
-
-const RecordsLink = styled.div`
-  color: #52b6ff;
-  font-size: 18px;
 `;

@@ -1,44 +1,42 @@
 import "../styles/reset.css";
 import styled from "styled-components";
 import { FaTrashAlt } from "react-icons/fa";
-import UserContext from "../contexts/UserContext";
-import { useContext } from "react";
-import { Link } from "react-router-dom";
-import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import Top from "./Top";
+import Bottom from "./Bottom";
+import { useState } from "react";
+import Days from "./Days";
 
 export default function Habits() {
-  const user = useContext(UserContext);
+  const [clicked, setClicked] = useState(false);
+
+  function toShowAddHabitsBox() {
+    setClicked(true);
+  }
+
+  function toCreateHabit() {}
+
+  function toCancelHabit() {
+    setClicked(false);
+  }
+
   return (
     <Container>
-      <Top>
-        <LogoName>TrackIt</LogoName>
-        <ProfileImage>
-          <img src={user.image} alt="" />
-        </ProfileImage>
-      </Top>
+      <Top />
       <Content>
         <MyHabits>
           <MyHabitsText>Meus hábitos</MyHabitsText>
-          <AddButton>+</AddButton>
+          <AddButton onClick={toShowAddHabitsBox}>+</AddButton>
         </MyHabits>
-        <AddHabitsBox>
+        <AddHabitsBox display={clicked}>
           <HabitName placeholder="nome do hábito"></HabitName>
-          <Days>
-            <Day>D</Day>
-            <Day>S</Day>
-            <Day>T</Day>
-            <Day>Q</Day>
-            <Day>Q</Day>
-            <Day>S</Day>
-            <Day>S</Day>
-          </Days>
+          <Days />
           <CancelSaveDiv>
-            <Cancel>Cancelar</Cancel>
-            <Save>Salvar</Save>
+            <Cancel onClick={toCancelHabit}>Cancelar</Cancel>
+            <Save onClick={toCreateHabit}>Salvar</Save>
           </CancelSaveDiv>
         </AddHabitsBox>
-        <MyHabit>
+        <MyHabit display={clicked}>
           <MyHabitTop>
             <HabitTitle>Ler 1 capitulo de livro</HabitTitle>
             <Trash>
@@ -60,19 +58,7 @@ export default function Habits() {
           começar a trackear!
         </NoHabitsAdded>
       </Content>
-      <Bottom>
-        <Link to="/habitos">
-          <HabitsLink>Hábitos</HabitsLink>
-        </Link>
-        <Link to="/hoje">
-          <CircularProgressBar>
-            <CircularProgressbar value="35" text="Hoje" />
-          </CircularProgressBar>
-        </Link>
-        <Link to="/historico">
-          <RecordsLink>Histórico</RecordsLink>
-        </Link>
-      </Bottom>
+      <Bottom />
     </Container>
   );
 }
@@ -84,39 +70,6 @@ const Container = styled.div`
   width: 100vw;
   background-color: #f2f2f2;
   padding-top: 70px;
-`;
-
-const Top = styled.div`
-  height: 70px;
-  background-color: #126ba5;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-`;
-
-const LogoName = styled.div`
-  font-family: "Playball", cursive;
-  font-size: 39px;
-  color: #fff;
-`;
-
-const ProfileImage = styled.div`
-  background-color: red;
-  border-radius: 50px;
-  width: 51px;
-  height: 51px;
-
-  img {
-    border-radius: 50px;
-    width: 51px;
-    height: 51px;
-  }
 `;
 
 const Content = styled.div`
@@ -162,6 +115,7 @@ const AddHabitsBox = styled.div`
   border-radius: 5px;
   padding: 15px;
   margin-top: 20px;
+  display: ${(props) => (props.display ? "inherit" : "none")};
 `;
 
 const HabitName = styled.input`
@@ -178,17 +132,10 @@ const HabitName = styled.input`
   }
 `;
 
-const Days = styled.div`
-  width: 100%;
-  height: auto;
-  margin-top: 5px;
-  display: flex;
-`;
-
 const Day = styled.div`
   width: 30px;
   height: 30px;
-  background: #ffffff;
+  background: ${(props) => (props.mainClass ? "#cfcfcf" : "#ffffff")};
   border: 1px solid #d5d5d5;
   box-sizing: border-box;
   border-radius: 5px;
@@ -196,7 +143,7 @@ const Day = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #dbdbdb;
+  color: ${(props) => (props.mainClass ? "#fff" : "#dbdbdb")};
   font-size: 20px;
 `;
 
@@ -238,6 +185,7 @@ const MyHabit = styled.div`
   border-radius: 5px;
   padding: 12px;
   margin-top: 8px;
+  display: ${(props) => (props.display ? "inherit" : "none")};
 `;
 
 const MyHabitTop = styled.div`
@@ -268,43 +216,5 @@ const NoHabitsAdded = styled.div`
   height: auto;
   margin-top: 30px;
   color: #666666;
-  font-size: 18px;
-`;
-
-const Bottom = styled.div`
-  width: 100%;
-  height: 70px;
-  background-color: #fff;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 45px;
-`;
-
-const HabitsLink = styled.div`
-  color: #52b6ff;
-  font-size: 18px;
-`;
-
-const CircularProgressBar = styled.div`
-  background-color: #52b6ff;
-  width: 91px;
-  height: 91px;
-  border-radius: 51px;
-  font-size: 18px;
-  position: fixed;
-  left: calc((100vw / 2) - (91px / 2));
-  bottom: 25px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #fff;
-`;
-
-const RecordsLink = styled.div`
-  color: #52b6ff;
   font-size: 18px;
 `;

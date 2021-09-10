@@ -74,11 +74,13 @@ export default function Registration() {
           onChange={(e) => setImage(e.target.value)}
           disabled={clicked}
         ></Photo>
-        <RegisterButton onClick={registerUser} disabled={clicked}>{clicked === false ? (
+        <RegisterButton onClick={registerUser} disabled={clicked}>
+          {clicked === false ? (
             "Cadastrar"
           ) : (
             <Loader type="ThreeDots" color="#FFFFFF" height={45} width={60} />
-          )}</RegisterButton>
+          )}
+        </RegisterButton>
         <Link to="/">
           <ToLogin>Já tem uma conta? Faça login!</ToLogin>
         </Link>
@@ -112,7 +114,7 @@ const Email = styled.input`
   margin-top: 2vh;
   width: 100%;
   height: 45px;
-  background: ${props => props.disabled ? "#f2f2f2" : "#ffffff"};
+  background: ${(props) => (props.disabled ? "#f2f2f2" : "#ffffff")};
   border: 1px solid #d5d5d5;
   border-radius: 5px;
   color: #515151;
@@ -128,7 +130,7 @@ const Password = styled.input`
   margin-top: 5px;
   width: 100%;
   height: 45px;
-  background: ${props => props.disabled ? "#f2f2f2" : "#ffffff"};
+  background: ${(props) => (props.disabled ? "#f2f2f2" : "#ffffff")};
   color: #515151;
   border: 1px solid #d5d5d5;
   border-radius: 5px;
@@ -144,7 +146,7 @@ const Name = styled.input`
   margin-top: 5px;
   width: 100%;
   height: 45px;
-  background: ${props => props.disabled ? "#f2f2f2" : "#ffffff"};
+  background: ${(props) => (props.disabled ? "#f2f2f2" : "#ffffff")};
   border: 1px solid #d5d5d5;
   border-radius: 5px;
   font-size: 18px;
@@ -160,7 +162,7 @@ const Photo = styled.input`
   margin-top: 5px;
   width: 100%;
   height: 45px;
-  background: ${props => props.disabled ? "#f2f2f2" : "#ffffff"};
+  background: ${(props) => (props.disabled ? "#f2f2f2" : "#ffffff")};
   border: 1px solid #d5d5d5;
   border-radius: 5px;
   color: #515151;
@@ -178,7 +180,7 @@ const RegisterButton = styled.button`
   height: 45px;
   background: #52b6ff;
   border-radius: 4.63636px;
-  opacity: ${props => props.disabled ? 0.7 : 1};
+  opacity: ${(props) => (props.disabled ? 0.7 : 1)};
   border: none;
   color: #fff;
   font-family: "Lexend Deca", sans-serif;
