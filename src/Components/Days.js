@@ -1,23 +1,14 @@
 import styled from "styled-components";
-import { useState } from "react";
 import Day from "./Day";
 
-export default function Days() {
-  const [selectedDays, setSelectedDays] = useState([]);
-  const [classSelectedDays, setClassSelectedDays] = useState(false);
-
+export default function Days({selectedDays, setSelectedDays}) {
+  
   const day = ["D", "S", "T", "Q", "Q", "S", "S"];
 
-  function toSelectDay(index) {
-    const daysArr = selectedDays.find((i, id) => id === index);
-    console.log(daysArr);
-    setClassSelectedDays(true);
-    setSelectedDays([...selectedDays, index]);
-    console.log(selectedDays);
-  }
+
   return (
     <DaysWeek>
-      <Day day={day} classSelectedDays={classSelectedDays} toSelectDay={toSelectDay}/>
+      {day.map((i, index) => <Day day={i} index={index} selectedDays={selectedDays} setSelectedDays={setSelectedDays}/>)}
     </DaysWeek>
   );
 }

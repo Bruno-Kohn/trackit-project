@@ -4,19 +4,81 @@ import { FaTrashAlt } from "react-icons/fa";
 import "react-circular-progressbar/dist/styles.css";
 import Top from "./Top";
 import Bottom from "./Bottom";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import UserContext from "../contexts/UserContext";
 import Days from "./Days";
+import axios from "axios";
 
 export default function Habits() {
   const [clicked, setClicked] = useState(false);
+  const [selectedDays, setSelectedDays] = useState([]);
+  const [typedHabit, setTypedHabit] = useState("");
+  const [habitsList, setHabitsList] = useState([]);
+  const user = useContext(UserContext);
 
   function toShowAddHabitsBox() {
     setClicked(true);
   }
 
-  function toCreateHabit() {}
+  function toCreateHabit() {
+    console.log("enviando");
+
+    const body = {
+      name: typedHabit,
+      days: selectedDays,
+    };
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    const req = axios.post(
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
+      body,
+      config
+    );
+
+    req.then((resp) => {
+      console.log("sucesso!");
+      setTypedHabit("");
+      setClicked(false);
+    });
+
+    req.catch((error) => {
+      console.log(error);
+      alert("Favor, tente novamente!");
+    });
+  }
+
+  //listar habitos useEffect https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits
+
+  useEffect(() => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    const req = axios.get(
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
+      config
+    );
+
+    req.then((resp) => {
+      console.log(resp.data);
+      setHabitsList(resp.data);
+    });
+
+    req.catch((error) => {
+      console.log(error);
+      alert("Favor, tente novamente!");
+    });
+    // eslint-disable-next-line
+  }, []);
 
   function toCancelHabit() {
+    setSelectedDays([]);
     setClicked(false);
   }
 
@@ -29,34 +91,43 @@ export default function Habits() {
           <AddButton onClick={toShowAddHabitsBox}>+</AddButton>
         </MyHabits>
         <AddHabitsBox display={clicked}>
-          <HabitName placeholder="nome do hábito"></HabitName>
-          <Days />
+          <HabitName
+            placeholder="nome do hábito"
+            value={typedHabit}
+            onChange={(e) => setTypedHabit(e.target.value)}
+          ></HabitName>
+          <Days selectedDays={selectedDays} setSelectedDays={setSelectedDays} />
           <CancelSaveDiv>
             <Cancel onClick={toCancelHabit}>Cancelar</Cancel>
             <Save onClick={toCreateHabit}>Salvar</Save>
           </CancelSaveDiv>
         </AddHabitsBox>
-        <MyHabit display={clicked}>
-          <MyHabitTop>
-            <HabitTitle>Ler 1 capitulo de livro</HabitTitle>
-            <Trash>
-              <FaTrashAlt />
-            </Trash>
-          </MyHabitTop>
-          <MyHabitDays>
-            <Day>D</Day>
-            <Day>S</Day>
-            <Day>T</Day>
-            <Day>Q</Day>
-            <Day>Q</Day>
-            <Day>S</Day>
-            <Day>S</Day>
-          </MyHabitDays>
-        </MyHabit>
-        <NoHabitsAdded>
-          Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para
-          começar a trackear!
-        </NoHabitsAdded>
+        {habitsList.length === 0 ? (
+          <NoHabitsAdded>
+            Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para
+            começar a trackear!
+          </NoHabitsAdded>
+        ) : (
+          habitsList.map((habit) => (
+            <MyHabit>
+              <MyHabitTop>
+                <HabitTitle>{habit.name}</HabitTitle>
+                <Trash>
+                  <FaTrashAlt />
+                </Trash>
+              </MyHabitTop>
+              <MyHabitDays>
+                <Day>D</Day>
+                <Day>S</Day>
+                <Day>T</Day>
+                <Day>Q</Day>
+                <Day>Q</Day>
+                <Day>S</Day>
+                <Day>S</Day>
+              </MyHabitDays>
+            </MyHabit>
+          ))
+        )}
       </Content>
       <Bottom />
     </Container>
@@ -185,7 +256,7 @@ const MyHabit = styled.div`
   border-radius: 5px;
   padding: 12px;
   margin-top: 8px;
-  display: ${(props) => (props.display ? "inherit" : "none")};
+  //display: ${(props) => (props.display ? "inherit" : "none")};
 `;
 
 const MyHabitTop = styled.div`
