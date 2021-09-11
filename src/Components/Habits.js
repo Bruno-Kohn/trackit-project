@@ -22,8 +22,6 @@ export default function Habits() {
   }
 
   function toCreateHabit() {
-    console.log("enviando");
-
     const body = {
       name: typedHabit,
       days: selectedDays,
@@ -41,18 +39,15 @@ export default function Habits() {
     );
 
     req.then((resp) => {
-      console.log("sucesso!");
       setTypedHabit("");
       setClicked(false);
+      setHabitsList([...habitsList, resp.data]);
     });
 
     req.catch((error) => {
-      console.log(error);
       alert("Favor, tente novamente!");
     });
   }
-
-  //listar habitos useEffect https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits
 
   useEffect(() => {
     const config = {
@@ -67,12 +62,10 @@ export default function Habits() {
     );
 
     req.then((resp) => {
-      console.log(resp.data);
       setHabitsList(resp.data);
     });
 
     req.catch((error) => {
-      console.log(error);
       alert("Favor, tente novamente!");
     });
     // eslint-disable-next-line
@@ -84,26 +77,28 @@ export default function Habits() {
   }
 
   function toDeleteHabit(index) {
-    alert(index);
-    const config = {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    };
+    let confirmation = window.confirm("Deseja deletar esse hábito?");
+    if (confirmation) {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
 
-    const req = axios.delete(
-      `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${index}`,
-      config
-    );
+      const req = axios.delete(
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${index}`,
+        config
+      );
 
-    req.then((resp) => {
-      console.log("Deletado com sucesso");
-    });
+      req.then((resp) => {
+        const newListOfHabits = habitsList.filter((i) => index !== i.id);
+        setHabitsList(newListOfHabits);
+      });
 
-    req.catch((error) => {
-      console.log(error);
-      alert("Erro ao deletar");
-    });
+      req.catch((error) => {
+        alert("Erro ao deletar");
+      });
+    }
   }
 
   return (
@@ -137,11 +132,13 @@ export default function Habits() {
               <MyHabitTop>
                 <HabitTitle>{habit.name}</HabitTitle>
                 <Trash>
-                  <FaTrashAlt onClick={() => toDeleteHabit(habit.id)}/>
+                  <FaTrashAlt onClick={() => toDeleteHabit(habit.id)} />
                 </Trash>
               </MyHabitTop>
               <MyHabitDays>
-                {day.map((i, index) => <Day mainClass={habit.days.includes(index)}>{i}</Day>)}
+                {day.map((i, index) => (
+                  <Day mainClass={habit.days.includes(index)}>{i}</Day>
+                ))}
               </MyHabitDays>
             </MyHabit>
           ))

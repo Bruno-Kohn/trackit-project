@@ -11,11 +11,9 @@ export default function Day({ day, index, selectedDays, setSelectedDays }) {
       });
       setClassSelectedDays(!classSelectedDays);
       setSelectedDays(daysArr);
-      console.log(daysArr);
     } else {
       setClassSelectedDays(!classSelectedDays);
       setSelectedDays([...selectedDays, index]);
-      console.log([...selectedDays, index]);
     }
   }
   return (
