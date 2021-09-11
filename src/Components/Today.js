@@ -7,10 +7,26 @@ import UserContext from "../contexts/UserContext";
 import "react-circular-progressbar/dist/styles.css";
 import Top from "./Top";
 import Bottom from "./Bottom";
+import dayjs from "dayjs";
+import "dayjs/locale/pt-br";
 
 export default function Today() {
   const [habits, setHabits] = useState([]);
   const user = useContext(UserContext);
+  const weekdayName = [
+    "Domingo",
+    "Segunda",
+    "Terça",
+    "Quarta",
+    "Quinta",
+    "Sexta",
+    "Sábado",
+  ];
+
+  console.log(dayjs());
+  console.log(dayjs().month());
+  console.log(dayjs().format("DD/MM"));
+  console.log(dayjs().day());
 
   useEffect(() => {
     const config = {
@@ -36,7 +52,10 @@ export default function Today() {
       <Top />
       <Content>
         <TopContent>
-          <Date>Segunda, 17/05</Date>
+          <Date>
+            {weekdayName.filter((i, index) => index === dayjs().day())},{" "}
+            {dayjs().format("DD/MM")}
+          </Date>
           <HabitsDone>33% dos hábitos concluidos</HabitsDone>
         </TopContent>
         {habits.map((i) => (
