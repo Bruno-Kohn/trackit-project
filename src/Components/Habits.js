@@ -83,6 +83,29 @@ export default function Habits() {
     setClicked(false);
   }
 
+  function toDeleteHabit(index) {
+    alert(index);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    const req = axios.delete(
+      `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${index}`,
+      config
+    );
+
+    req.then((resp) => {
+      console.log("Deletado com sucesso");
+    });
+
+    req.catch((error) => {
+      console.log(error);
+      alert("Erro ao deletar");
+    });
+  }
+
   return (
     <Container>
       <Top />
@@ -114,7 +137,7 @@ export default function Habits() {
               <MyHabitTop>
                 <HabitTitle>{habit.name}</HabitTitle>
                 <Trash>
-                  <FaTrashAlt onClick={() => alert()}/>
+                  <FaTrashAlt onClick={() => toDeleteHabit(habit.id)}/>
                 </Trash>
               </MyHabitTop>
               <MyHabitDays>
