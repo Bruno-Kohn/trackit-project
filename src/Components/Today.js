@@ -53,42 +53,6 @@ export default function Today() {
             </HabitsButton>
           </HabitsDisplay>
         ))}
-        <HabitsDisplay>
-          <HabitsInfos>
-            <HabitsName>Ler 1 capitulo de livro</HabitsName>
-            <HabitsSequence>Sequencia atual: 4 dias</HabitsSequence>
-            <HabitsRecord>Seu recorde: 5 dias</HabitsRecord>
-          </HabitsInfos>
-          <HabitsButton>
-            <CheckButton>
-              <FaCheck />
-            </CheckButton>
-          </HabitsButton>
-        </HabitsDisplay>
-        <HabitsDisplay>
-          <HabitsInfos>
-            <HabitsName>Ler 1 capitulo de livro</HabitsName>
-            <HabitsSequence>Sequencia atual: 4 dias</HabitsSequence>
-            <HabitsRecord>Seu recorde: 5 dias</HabitsRecord>
-          </HabitsInfos>
-          <HabitsButton>
-            <CheckButton>
-              <FaCheck />
-            </CheckButton>
-          </HabitsButton>
-        </HabitsDisplay>
-        <HabitsDisplay>
-          <HabitsInfos>
-            <HabitsName>Ler 1 capitulo de livro</HabitsName>
-            <HabitsSequence>Sequencia atual: 4 dias</HabitsSequence>
-            <HabitsRecord>Seu recorde: 5 dias</HabitsRecord>
-          </HabitsInfos>
-          <HabitsButton>
-            <CheckButton>
-              <FaCheck />
-            </CheckButton>
-          </HabitsButton>
-        </HabitsDisplay>
       </Content>
       <Bottom />
     </Container>
@@ -98,7 +62,7 @@ export default function Today() {
 //--------- Styled-Components----------
 
 const Container = styled.div`
-  height: 100vh;
+  height: calc(100vh + 120px);
   width: 100vw;
   background-color: #f2f2f2;
   padding-top: 70px;
@@ -108,6 +72,7 @@ const Content = styled.div`
   width: 95%;
   height: auto;
   margin: 20px auto 0 auto;
+  padding-bottom: 120px;
 `;
 
 const TopContent = styled.div`

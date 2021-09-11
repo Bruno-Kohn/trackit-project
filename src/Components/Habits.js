@@ -15,6 +15,7 @@ export default function Habits() {
   const [typedHabit, setTypedHabit] = useState("");
   const [habitsList, setHabitsList] = useState([]);
   const user = useContext(UserContext);
+  const day = ["D", "S", "T", "Q", "Q", "S", "S"];
 
   function toShowAddHabitsBox() {
     setClicked(true);
@@ -113,17 +114,11 @@ export default function Habits() {
               <MyHabitTop>
                 <HabitTitle>{habit.name}</HabitTitle>
                 <Trash>
-                  <FaTrashAlt />
+                  <FaTrashAlt onClick={() => alert()}/>
                 </Trash>
               </MyHabitTop>
               <MyHabitDays>
-                <Day>D</Day>
-                <Day>S</Day>
-                <Day>T</Day>
-                <Day>Q</Day>
-                <Day>Q</Day>
-                <Day>S</Day>
-                <Day>S</Day>
+                {day.map((i, index) => <Day mainClass={habit.days.includes(index)}>{i}</Day>)}
               </MyHabitDays>
             </MyHabit>
           ))
