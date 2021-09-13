@@ -1,14 +1,19 @@
 import styled from "styled-components";
 import Day from "./Day";
 
-export default function Days({selectedDays, setSelectedDays}) {
-  
+export default function Days({ selectedDays, setSelectedDays }) {
   const day = ["D", "S", "T", "Q", "Q", "S", "S"];
-
 
   return (
     <DaysWeek>
-      {day.map((i, index) => <Day day={i} index={index} selectedDays={selectedDays} setSelectedDays={setSelectedDays}/>)}
+      {day.map((i, index) => (
+        <Day
+          day={i}
+          index={index}
+          selectedDays={selectedDays}
+          setSelectedDays={setSelectedDays}
+        />
+      ))}
     </DaysWeek>
   );
 }
@@ -21,5 +26,3 @@ const DaysWeek = styled.div`
   margin-top: 5px;
   display: flex;
 `;
-
-

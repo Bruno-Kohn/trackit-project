@@ -12,6 +12,7 @@ import "dayjs/locale/pt-br";
 
 export default function Today() {
   const [habits, setHabits] = useState([]);
+  const [checkButton, setCheckButton] = useState(1);
   const user = useContext(UserContext);
   const weekdayName = [
     "Domingo",
@@ -22,11 +23,6 @@ export default function Today() {
     "Sexta",
     "Sábado",
   ];
-
-  console.log(dayjs());
-  console.log(dayjs().month());
-  console.log(dayjs().format("DD/MM"));
-  console.log(dayjs().day());
 
   useEffect(() => {
     const config = {
@@ -41,12 +37,57 @@ export default function Today() {
 
     req.then((resp) => {
       setHabits(resp.data);
+      console.log(resp.data);
     });
 
     req.catch((error) => console.log(error));
     // eslint-disable-next-line
-  }, []);
+  }, [checkButton]);
 
+  const doneQtd = habits.filter((i) => i.done === true).length;
+  const habitsPercentage = (doneQtd / habits.length) * 100;
+  console.log(habits, "lista");
+
+  function toCheckUncheckHabit(index, isDone) {
+    //alert(index);
+    //alert(isDone);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    if (!isDone) {
+      const req = axios.post(
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${index}/check`,
+        {},
+        config
+      );
+      req.then((resp) => {
+        console.log(resp);
+        const clicked = habits.filter((i) => i.id === index);
+        console.log(clicked, "elemento clicado");
+        setCheckButton(checkButton + 1);
+      });
+      req.catch((error) => {
+        console.log(error);
+      });
+    } else {
+      const req = axios.post(
+        `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${index}/uncheck`,
+        {},
+        config
+      );
+      req.then((resp) => {
+        console.log(resp);
+        const clicked = habits.filter((i) => i.id === index);
+        console.log(clicked, "elemento clicado");
+        setCheckButton(checkButton + 1);
+      });
+      req.catch((error) => {
+        console.log(error);
+      });
+    }
+  }
   return (
     <Container>
       <Top />
@@ -56,24 +97,50 @@ export default function Today() {
             {weekdayName.filter((i, index) => index === dayjs().day())},{" "}
             {dayjs().format("DD/MM")}
           </Date>
-          <HabitsDone>33% dos hábitos concluidos</HabitsDone>
+          <HabitsDone doneQtd={doneQtd}>
+            {doneQtd === 0
+              ? "Nenhum habito concluido ainda"
+              : `${habitsPercentage.toFixed(0)}% dos hábitos concluidos`}
+          </HabitsDone>
         </TopContent>
-        {habits.map((i) => (
-          <HabitsDisplay>
+        {habits.map((todayHabit) => (
+          <HabitsDisplay key={todayHabit.id}>
             <HabitsInfos>
-              <HabitsName>Ler 1 capitulo de livro</HabitsName>
-              <HabitsSequence>Sequencia atual: 4 dias</HabitsSequence>
-              <HabitsRecord>Seu recorde: 5 dias</HabitsRecord>
+              <HabitsName>{todayHabit.name}</HabitsName>
+              <HabitsSequence>
+                <h1>
+                  Sequencia atual:{" "}
+                  <Sequence sequenceNumber={todayHabit.currentSequence}>
+                    {todayHabit.currentSequence} dias
+                  </Sequence>
+                </h1>
+              </HabitsSequence>
+              <HabitsRecord>
+                <h1>
+                  Seu recorde:{" "}
+                  <Record
+                    recordNumber={todayHabit.highestSequence}
+                    sequenceNumber={todayHabit.currentSequence}
+                  >
+                    {todayHabit.highestSequence} dias
+                  </Record>
+                </h1>
+              </HabitsRecord>
             </HabitsInfos>
             <HabitsButton>
-              <CheckButton>
+              <CheckButton
+                done={todayHabit.done}
+                onClick={() =>
+                  toCheckUncheckHabit(todayHabit.id, todayHabit.done)
+                }
+              >
                 <FaCheck />
               </CheckButton>
             </HabitsButton>
           </HabitsDisplay>
         ))}
       </Content>
-      <Bottom />
+      <Bottom percentage={habitsPercentage.toFixed(0)} />
     </Container>
   );
 }
@@ -114,7 +181,7 @@ const HabitsDone = styled.div`
   display: flex;
   align-items: center;
   font-size: 18px;
-  color: #8fc549;
+  color: ${(props) => (props.doneQtd === 0 ? "#bababa" : "#8fc549")};
 `;
 
 const HabitsDisplay = styled.div`
@@ -150,12 +217,24 @@ const HabitsSequence = styled.div`
   font-size: 13px;
 `;
 
+const Sequence = styled.span`
+  color: ${(props) => (props.sequenceNumber >= 1 ? "#8fc549" : "#bababa")};
+`;
+
+const Record = styled.span`
+  color: ${(props) =>
+    props.recordNumber > 0 && props.recordNumber >= props.sequenceNumber
+      ? "#8fc549"
+      : "#bababa"};
+`;
+
 const HabitsRecord = styled.div`
   width: 100%;
   height: 30%;
   display: flex;
   align-items: center;
-  color: #666666;
+  color: ${(props) =>
+    props.recordNumber === props.sequenceNumber ? "#666666" : "#8fc549"};
   font-size: 13px;
 `;
 
@@ -170,7 +249,7 @@ const HabitsButton = styled.div`
 const CheckButton = styled.button`
   width: 69px;
   height: 69px;
-  background-color: #8fc549;
+  background-color: ${(props) => (props.done ? "#8fc549" : "#e7e7e7")};
   border-radius: 5px;
   border: none;
   color: #fff;

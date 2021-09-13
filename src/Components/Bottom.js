@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { CircularProgressbar } from "react-circular-progressbar";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import styled from "styled-components";
 
-export default function Bottom() {
+export default function Bottom({ percentage }) {
   return (
     <BottomBar>
       <Link to="/habitos">
@@ -10,7 +10,18 @@ export default function Bottom() {
       </Link>
       <Link to="/hoje">
         <CircularProgressBar>
-          <CircularProgressbar value="35" text="Hoje" />
+          <CircularProgressbar
+            value={percentage}
+            text="Hoje"
+            background
+            backgroundPadding={6}
+            styles={buildStyles({
+              textColor: "#FFF",
+              trailColor: "#52b6ff",
+              backgroundColor: "#52b6ff",
+              pathColor: "#FFF",
+            })}
+          />
         </CircularProgressBar>
       </Link>
       <Link to="/historico">

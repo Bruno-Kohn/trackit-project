@@ -98,7 +98,7 @@ const Email = styled.input`
   margin-top: 2vh;
   width: 100%;
   height: 45px;
-  background: ${props => props.disabled ? "#f2f2f2" : "#ffffff"};
+  background: ${(props) => (props.disabled ? "#f2f2f2" : "#ffffff")};
   border: 1px solid #d5d5d5;
   border-radius: 5px;
   color: #515151;
@@ -115,7 +115,7 @@ const Password = styled.input`
   margin-top: 5px;
   width: 100%;
   height: 45px;
-  background: ${props => props.disabled ? "#f2f2f2" : "#ffffff"};
+  background: ${(props) => (props.disabled ? "#f2f2f2" : "#ffffff")};
   border: 1px solid #d5d5d5;
   border-radius: 5px;
   color: #515151;
@@ -132,7 +132,7 @@ const LoginButton = styled.button`
   width: 100%;
   height: 45px;
   background: #52b6ff;
-  opacity: ${props => props.disabled ? 0.7 : 1};
+  opacity: ${(props) => (props.disabled ? 0.7 : 1)};
   border-radius: 4.63636px;
   border: none;
   color: #fff;
