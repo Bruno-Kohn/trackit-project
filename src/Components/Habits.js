@@ -8,6 +8,7 @@ import { useState, useContext, useEffect } from "react";
 import UserContext from "../contexts/UserContext";
 import Days from "./Days";
 import axios from "axios";
+import PercentageContext from "../contexts/PercentageContext";
 
 export default function Habits() {
   const [clicked, setClicked] = useState(false);
@@ -16,6 +17,7 @@ export default function Habits() {
   const [habitsList, setHabitsList] = useState([]);
   const user = useContext(UserContext);
   const day = ["D", "S", "T", "Q", "Q", "S", "S"];
+  const percentage = useContext(PercentageContext);
 
   function toShowAddHabitsBox() {
     setClicked(true);
@@ -144,7 +146,7 @@ export default function Habits() {
           ))
         )}
       </Content>
-      <Bottom />
+      <Bottom percentage={percentage.toFixed(0)}/>
     </Container>
   );
 }

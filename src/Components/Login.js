@@ -25,12 +25,10 @@ export default function Login({ setUser }) {
     );
 
     req.then((resp) => {
-      console.log(resp.data);
       setUser(resp.data);
       history.push("/hoje");
     });
     req.catch((error) => {
-      console.log(error);
       setEmail("");
       setPassword("");
       setClicked(false);

@@ -10,7 +10,7 @@ import Bottom from "./Bottom";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 
-export default function Today() {
+export default function Today({ setPercentage }) {
   const [habits, setHabits] = useState([]);
   const [checkButton, setCheckButton] = useState(1);
   const user = useContext(UserContext);
@@ -37,7 +37,6 @@ export default function Today() {
 
     req.then((resp) => {
       setHabits(resp.data);
-      console.log(resp.data);
     });
 
     req.catch((error) => console.log(error));
@@ -46,7 +45,7 @@ export default function Today() {
 
   const doneQtd = habits.filter((i) => i.done === true).length;
   const habitsPercentage = (doneQtd / habits.length) * 100;
-  console.log(habits, "lista");
+  setPercentage(habitsPercentage);
 
   function toCheckUncheckHabit(index, isDone) {
     //alert(index);
@@ -63,9 +62,6 @@ export default function Today() {
         config
       );
       req.then((resp) => {
-        console.log(resp);
-        const clicked = habits.filter((i) => i.id === index);
-        console.log(clicked, "elemento clicado");
         setCheckButton(checkButton + 1);
       });
       req.catch((error) => {
@@ -78,9 +74,6 @@ export default function Today() {
         config
       );
       req.then((resp) => {
-        console.log(resp);
-        const clicked = habits.filter((i) => i.id === index);
-        console.log(clicked, "elemento clicado");
         setCheckButton(checkButton + 1);
       });
       req.catch((error) => {

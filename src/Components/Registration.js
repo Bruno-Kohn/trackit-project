@@ -30,7 +30,6 @@ export default function Registration() {
 
     req.then((resp) => history.push("/"));
     req.catch((error) => {
-      console.log(error);
       setEmail("");
       setPassword("");
       setName("");

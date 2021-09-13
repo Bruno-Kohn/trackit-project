@@ -3,8 +3,11 @@ import styled from "styled-components";
 import "react-circular-progressbar/dist/styles.css";
 import Top from "./Top";
 import Bottom from "./Bottom";
+import PercentageContext from "../contexts/PercentageContext";
+import { useContext } from "react";
 
 export default function Records() {
+  const percentage = useContext(PercentageContext);
   return (
     <Container>
       <Top />
@@ -14,7 +17,7 @@ export default function Records() {
           Em breve você poderá ver o histórico dos seus hábitos aqui!
         </RecordsMessage>
       </Content>
-      <Bottom />
+      <Bottom percentage={percentage.toFixed(0)}/>
     </Container>
   );
 }
