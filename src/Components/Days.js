@@ -1,8 +1,8 @@
-import styled from "styled-components";
-import Day from "./Day";
+import { DaysWeek } from '../styles/globalStyles.js';
+import Day from './Day';
 
 export default function Days({ selectedDays, setSelectedDays }) {
-  const day = ["D", "S", "T", "Q", "Q", "S", "S"];
+  const day = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
 
   return (
     <DaysWeek>
@@ -17,12 +17,3 @@ export default function Days({ selectedDays, setSelectedDays }) {
     </DaysWeek>
   );
 }
-
-//--------- Styled-Components----------
-
-const DaysWeek = styled.div`
-  width: 100%;
-  height: auto;
-  margin-top: 5px;
-  display: flex;
-`;

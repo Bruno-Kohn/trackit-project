@@ -1,23 +1,62 @@
-import "../styles/reset.css";
-import styled from "styled-components";
-import { FaTrashAlt } from "react-icons/fa";
-import "react-circular-progressbar/dist/styles.css";
-import Top from "./Top";
-import Bottom from "./Bottom";
-import { useState, useContext, useEffect } from "react";
-import UserContext from "../contexts/UserContext";
-import Days from "./Days";
-import axios from "axios";
-import PercentageContext from "../contexts/PercentageContext";
+import '../styles/reset.css';
+import { FaTrashAlt } from 'react-icons/fa';
+import 'react-circular-progressbar/dist/styles.css';
+import Top from './Top';
+import Bottom from './Bottom';
+import { useState, useContext, useEffect } from 'react';
+import UserContext from '../contexts/UserContext';
+import Days from './Days';
+import PercentageContext from '../contexts/PercentageContext';
+import {
+  createHabitReq,
+  habitsListReq,
+  deleteHabitReq,
+} from '../services/api.service';
+import {
+  NoHabitsAdded,
+  MyHabitDays,
+  Trash,
+  HabitTitle,
+  MyHabitTop,
+  MyHabit,
+  Save,
+  Cancel,
+  CancelSaveDiv,
+  Day,
+  HabitName,
+  AddHabitsBox,
+  AddButton,
+  MyHabitsText,
+  MyHabits,
+  Content,
+  Container,
+} from '../styles/globalStyles.js';
 
 export default function Habits() {
   const [clicked, setClicked] = useState(false);
   const [selectedDays, setSelectedDays] = useState([]);
-  const [typedHabit, setTypedHabit] = useState("");
+  const [typedHabit, setTypedHabit] = useState('');
   const [habitsList, setHabitsList] = useState([]);
   const user = useContext(UserContext);
-  const day = ["D", "S", "T", "Q", "Q", "S", "S"];
+  const day = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
   const percentage = useContext(PercentageContext);
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  };
+
+  useEffect(() => {
+    habitsListReq(config)
+      .then((resp) => {
+        setHabitsList(resp.data);
+      })
+      .catch((error) => {
+        alert('Favor, tente novamente!');
+      });
+    // eslint-disable-next-line
+  }, []);
 
   function toShowAddHabitsBox() {
     setClicked(true);
@@ -28,50 +67,16 @@ export default function Habits() {
       name: typedHabit,
       days: selectedDays,
     };
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    };
-    const req = axios.post(
-      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
-      body,
-      config
-    );
-
-    req.then((resp) => {
-      setTypedHabit("");
-      setClicked(false);
-      setHabitsList([...habitsList, resp.data]);
-    });
-
-    req.catch((error) => {
-      alert("Favor, tente novamente!");
-    });
+    createHabitReq(body, config)
+      .then((resp) => {
+        setTypedHabit('');
+        setClicked(false);
+        setHabitsList([...habitsList, resp.data]);
+      })
+      .catch((error) => {
+        alert('Favor, tente novamente!');
+      });
   }
-
-  useEffect(() => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    };
-
-    const req = axios.get(
-      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
-      config
-    );
-
-    req.then((resp) => {
-      setHabitsList(resp.data);
-    });
-
-    req.catch((error) => {
-      alert("Favor, tente novamente!");
-    });
-    // eslint-disable-next-line
-  }, []);
 
   function toCancelHabit() {
     setSelectedDays([]);
@@ -79,27 +84,16 @@ export default function Habits() {
   }
 
   function toDeleteHabit(index) {
-    let confirmation = window.confirm("Deseja deletar esse hábito?");
+    let confirmation = window.confirm('Deseja deletar esse hábito?');
     if (confirmation) {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-
-      const req = axios.delete(
-        `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${index}`,
-        config
-      );
-
-      req.then((resp) => {
-        const newListOfHabits = habitsList.filter((i) => index !== i.id);
-        setHabitsList(newListOfHabits);
-      });
-
-      req.catch((error) => {
-        alert("Erro ao deletar");
-      });
+      deleteHabitReq(index, config)
+        .then((resp) => {
+          const newListOfHabits = habitsList.filter((i) => index !== i.id);
+          setHabitsList(newListOfHabits);
+        })
+        .catch((error) => {
+          alert('Erro ao deletar');
+        });
     }
   }
 
@@ -113,7 +107,7 @@ export default function Habits() {
         </MyHabits>
         <AddHabitsBox display={clicked}>
           <HabitName
-            placeholder="nome do hábito"
+            placeholder='nome do hábito'
             value={typedHabit}
             onChange={(e) => setTypedHabit(e.target.value)}
           ></HabitName>
@@ -146,163 +140,7 @@ export default function Habits() {
           ))
         )}
       </Content>
-      <Bottom percentage={percentage.toFixed(0)}/>
+      <Bottom percentage={percentage.toFixed(0)} />
     </Container>
   );
 }
-
-//--------- Styled-Components----------
-
-const Container = styled.div`
-  height: 100vh;
-  width: 100vw;
-  background-color: #f2f2f2;
-  padding-top: 70px;
-`;
-
-const Content = styled.div`
-  height: auto;
-  width: 90%;
-  margin: 20px auto 0 auto;
-`;
-
-const MyHabits = styled.div`
-  width: 100%;
-  height: 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const MyHabitsText = styled.div`
-  width: auto;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  font-family: Lexend Deca;
-  font-size: 23px;
-  line-height: 29px;
-  color: #126ba5;
-`;
-
-const AddButton = styled.button`
-  width: 40px;
-  height: 35px;
-  background-color: #52b6ff;
-  border-radius: 4.63636px;
-  font-style: Lexend Deca;
-  font-size: 27px;
-  color: #fff;
-  border: none;
-`;
-
-const AddHabitsBox = styled.div`
-  width: 100%;
-  height: 180px;
-  background: #ffffff;
-  border-radius: 5px;
-  padding: 15px;
-  margin-top: 20px;
-  display: ${(props) => (props.display ? "inherit" : "none")};
-`;
-
-const HabitName = styled.input`
-  height: 45px;
-  border: 1px solid #d5d5d5;
-  border-radius: 5px;
-  width: 100%;
-  padding-left: 10px;
-  font-family: Lexend Deca;
-  font-size: 20px;
-
-  ::placeholder {
-    color: #dbdbdb;
-  }
-`;
-
-const Day = styled.div`
-  width: 30px;
-  height: 30px;
-  background: ${(props) => (props.mainClass ? "#cfcfcf" : "#ffffff")};
-  border: 1px solid #d5d5d5;
-  box-sizing: border-box;
-  border-radius: 5px;
-  margin-right: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: ${(props) => (props.mainClass ? "#fff" : "#dbdbdb")};
-  font-size: 20px;
-`;
-
-const CancelSaveDiv = styled.div`
-  width: 100%;
-  height: auto;
-  margin-top: 35px;
-  display: flex;
-  justify-content: flex-end;
-`;
-
-const Cancel = styled.button`
-  width: 84px;
-  height: 35px;
-  background-color: #fff;
-  border-radius: 5px;
-  border: none;
-  color: #52b6ff;
-  font-family: Lexend Deca;
-  font-size: 16px;
-  margin-right: 10px;
-`;
-
-const Save = styled.button`
-  width: 84px;
-  height: 35px;
-  background-color: #52b6ff;
-  border-radius: 5px;
-  border: none;
-  color: #fff;
-  font-family: Lexend Deca;
-  font-size: 16px;
-`;
-
-const MyHabit = styled.div`
-  height: 91px;
-  width: 100%;
-  background-color: #fff;
-  border-radius: 5px;
-  padding: 12px;
-  margin-top: 8px;
-  //display: ${(props) => (props.display ? "inherit" : "none")};
-`;
-
-const MyHabitTop = styled.div`
-  height: 50%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const HabitTitle = styled.div`
-  color: #666666;
-  font-size: 20px;
-`;
-
-const Trash = styled.div`
-  color: #666666;
-  font-size: 20px;
-`;
-
-const MyHabitDays = styled.div`
-  height: 50%;
-  display: flex;
-  align-items: center;
-`;
-
-const NoHabitsAdded = styled.div`
-  width: 100%;
-  height: auto;
-  margin-top: 30px;
-  color: #666666;
-  font-size: 18px;
-`;
