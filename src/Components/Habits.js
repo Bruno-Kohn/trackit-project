@@ -54,15 +54,6 @@ export default function Habits() {
   }
 
   useEffect(() => {
-    todaysListReq(userData.token)
-      .then((resp) => {
-        setHabits(resp.data);
-      })
-      .catch((error) => console.log(error));
-    // eslint-disable-next-line
-  }, [habits.length]);
-
-  useEffect(() => {
     habitsListReq(userData.token)
       .then((resp) => {
         setHabitsList(resp.data);
@@ -74,10 +65,20 @@ export default function Habits() {
         ]);
       })
       .catch((error) => {
+        console.log(error);
         alert('Favor, tente novamente!');
       });
     // eslint-disable-next-line
   }, [habitsList.length]);
+
+  useEffect(() => {
+    todaysListReq(userData.token)
+      .then((resp) => {
+        setHabits(resp.data);
+      })
+      .catch((error) => console.log(error));
+    // eslint-disable-next-line
+  }, [habits.length]);
 
   function toShowAddHabitsBox() {
     setClicked(true);
@@ -155,7 +156,9 @@ export default function Habits() {
               </MyHabitTop>
               <MyHabitDays>
                 {day.map((i, index) => (
-                  <Day mainClass={habit.days.includes(index)}>{i}</Day>
+                  <Day mainClass={habit.days.includes(index)} key={index}>
+                    {i}
+                  </Day>
                 ))}
               </MyHabitDays>
             </MyHabit>

@@ -25,8 +25,6 @@ export default function App() {
     []
   );
 
-  console.log(JSON.parse(localStorage.getItem('loginUser')));
-
   return (
     <UserContext.Provider value={{ userData, setUserData }}>
       <BrowserRouter>

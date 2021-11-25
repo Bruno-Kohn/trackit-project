@@ -12,6 +12,7 @@ export default function Days({ selectedDays, setSelectedDays }) {
           index={index}
           selectedDays={selectedDays}
           setSelectedDays={setSelectedDays}
+          key={index}
         />
       ))}
     </DaysWeek>
