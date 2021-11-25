@@ -4,13 +4,15 @@ import 'react-circular-progressbar/dist/styles.css';
 import Top from './Top';
 import Bottom from './Bottom';
 import { useState, useContext, useEffect } from 'react';
-import UserContext from '../contexts/UserContext';
 import Days from './Days';
 import PercentageContext from '../contexts/PercentageContext';
+import { useHistory } from 'react-router-dom';
+import UserContext from '../contexts/UserContext.js';
 import {
   createHabitReq,
   habitsListReq,
   deleteHabitReq,
+  todaysListReq,
 } from '../services/api.service';
 import {
   NoHabitsAdded,
@@ -37,26 +39,45 @@ export default function Habits() {
   const [selectedDays, setSelectedDays] = useState([]);
   const [typedHabit, setTypedHabit] = useState('');
   const [habitsList, setHabitsList] = useState([]);
-  const user = useContext(UserContext);
   const day = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
-  const percentage = useContext(PercentageContext);
+  const { percentage, setHabits, habits, setPercentage } =
+    useContext(PercentageContext);
+  const history = useHistory();
+  const { userData } = useContext(UserContext);
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-    },
-  };
+  const doneQtd = habits.filter((i) => i.done === true).length;
+  const habitsPercentage = (doneQtd / habits.length) * 100;
+  setPercentage(habitsPercentage);
+
+  if (!localStorage.getItem('loginUser')) {
+    history.push('/');
+  }
 
   useEffect(() => {
-    habitsListReq(config)
+    todaysListReq(userData.token)
+      .then((resp) => {
+        setHabits(resp.data);
+      })
+      .catch((error) => console.log(error));
+    // eslint-disable-next-line
+  }, [habits.length]);
+
+  useEffect(() => {
+    habitsListReq(userData.token)
       .then((resp) => {
         setHabitsList(resp.data);
+        setHabits([
+          ...habits,
+          resp.data.filter((i) =>
+            i.days.some((day) => day === new Date(Date.now()).getDay())
+          ),
+        ]);
       })
       .catch((error) => {
         alert('Favor, tente novamente!');
       });
     // eslint-disable-next-line
-  }, []);
+  }, [habitsList.length]);
 
   function toShowAddHabitsBox() {
     setClicked(true);
@@ -67,11 +88,12 @@ export default function Habits() {
       name: typedHabit,
       days: selectedDays,
     };
-    createHabitReq(body, config)
+    createHabitReq(body, userData.token)
       .then((resp) => {
         setTypedHabit('');
         setClicked(false);
         setHabitsList([...habitsList, resp.data]);
+        setSelectedDays([]);
       })
       .catch((error) => {
         alert('Favor, tente novamente!');
@@ -86,7 +108,7 @@ export default function Habits() {
   function toDeleteHabit(index) {
     let confirmation = window.confirm('Deseja deletar esse hábito?');
     if (confirmation) {
-      deleteHabitReq(index, config)
+      deleteHabitReq(index, userData.token)
         .then((resp) => {
           const newListOfHabits = habitsList.filter((i) => index !== i.id);
           setHabitsList(newListOfHabits);

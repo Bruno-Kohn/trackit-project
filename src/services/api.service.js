@@ -1,16 +1,17 @@
 import axios from 'axios';
+import bearerToken from './bearer';
 const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit';
 
-function createHabitReq(body, config) {
-  return axios.post(`${URL}/habits`, body, config);
+function createHabitReq(body, token) {
+  return axios.post(`${URL}/habits`, body, bearerToken(token));
 }
 
-function habitsListReq(config) {
-  return axios.get(`${URL}/habits`, config);
+function habitsListReq(token) {
+  return axios.get(`${URL}/habits`, bearerToken(token));
 }
 
-function deleteHabitReq(index, config) {
-  return axios.delete(`${URL}/habits/${index}`, config);
+function deleteHabitReq(index, token) {
+  return axios.delete(`${URL}/habits/${index}`, bearerToken(token));
 }
 
 function loginReq(body) {
@@ -21,16 +22,16 @@ function registerUserReq(body) {
   return axios.post(`${URL}/auth/sign-up`, body);
 }
 
-function todaysListReq(config) {
-  return axios.get(`${URL}/habits/today`, config);
+function todaysListReq(token) {
+  return axios.get(`${URL}/habits/today`, bearerToken(token));
 }
 
-function checkReq(index, config) {
-  return axios.post(`${URL}/habits/${index}/check`, {}, config);
+function checkReq(index, token) {
+  return axios.post(`${URL}/habits/${index}/check`, {}, bearerToken(token));
 }
 
-function uncheckReq(index, config) {
-  return axios.post(`${URL}/habits/${index}/uncheck`, {}, config);
+function uncheckReq(index, token) {
+  return axios.post(`${URL}/habits/${index}/uncheck`, {}, bearerToken(token));
 }
 
 export {

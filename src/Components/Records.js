@@ -4,6 +4,7 @@ import Top from './Top';
 import Bottom from './Bottom';
 import PercentageContext from '../contexts/PercentageContext';
 import { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   Container,
   ContentRecords,
@@ -12,7 +13,13 @@ import {
 } from '../styles/globalStyles';
 
 export default function Records() {
-  const percentage = useContext(PercentageContext);
+  const { percentage } = useContext(PercentageContext);
+  const history = useHistory();
+
+  if (!localStorage.getItem('loginUser')) {
+    history.push('/');
+  }
+
   return (
     <Container>
       <Top />

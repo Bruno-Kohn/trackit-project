@@ -1,7 +1,6 @@
 import '../styles/reset.css';
 import { FaCheck } from 'react-icons/fa';
 import { useState, useEffect, useContext } from 'react';
-import UserContext from '../contexts/UserContext';
 import 'react-circular-progressbar/dist/styles.css';
 import Top from './Top';
 import Bottom from './Bottom';
@@ -24,11 +23,15 @@ import {
   TopContent,
   ContentToday,
 } from '../styles/globalStyles.js';
+import PercentageContext from '../contexts/PercentageContext';
+import { useHistory } from 'react-router-dom';
+import UserContext from '../contexts/UserContext';
 
-export default function Today({ setPercentage }) {
-  const [habits, setHabits] = useState([]);
+export default function Today() {
   const [checkButton, setCheckButton] = useState(1);
-  const user = useContext(UserContext);
+  const { setPercentage, setHabits, habits } = useContext(PercentageContext);
+  const history = useHistory();
+  const { userData } = useContext(UserContext);
   const weekdayName = [
     'Domingo',
     'Segunda',
@@ -39,20 +42,18 @@ export default function Today({ setPercentage }) {
     'Sábado',
   ];
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-    },
-  };
+  if (!localStorage.getItem('loginUser')) {
+    history.push('/');
+  }
 
   useEffect(() => {
-    todaysListReq(config)
+    todaysListReq(userData.token)
       .then((resp) => {
         setHabits(resp.data);
       })
       .catch((error) => console.log(error));
     // eslint-disable-next-line
-  }, [checkButton]);
+  }, [checkButton, habits.length]);
 
   const doneQtd = habits.filter((i) => i.done === true).length;
   const habitsPercentage = (doneQtd / habits.length) * 100;
@@ -60,7 +61,7 @@ export default function Today({ setPercentage }) {
 
   function toCheckUncheckHabit(index, isDone) {
     if (!isDone) {
-      checkReq(index, config)
+      checkReq(index, userData.token)
         .then(() => {
           setCheckButton(checkButton + 1);
         })
@@ -68,7 +69,7 @@ export default function Today({ setPercentage }) {
           console.log(error);
         });
     } else {
-      uncheckReq(index, config)
+      uncheckReq(index, userData.token)
         .then(() => {
           setCheckButton(checkButton + 1);
         })

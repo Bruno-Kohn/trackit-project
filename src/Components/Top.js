@@ -1,5 +1,3 @@
-import UserContext from '../contexts/UserContext';
-import { useContext } from 'react';
 import {
   Topbar,
   UserInfo,
@@ -8,14 +6,18 @@ import {
 } from '../styles/globalStyles';
 
 export default function Top() {
-  const user = useContext(UserContext);
+  let info;
+  if (localStorage.getItem('loginUser')) {
+    info = JSON.parse(localStorage.getItem('loginUser'));
+  }
+
   return (
     <Topbar>
       <LogoName>TrackIt</LogoName>
       <UserInfo>
-        <h1>{user.name}</h1>
+        <h1>{info?.name}</h1>
         <ProfileImage>
-          <img src={user.image} alt='profile' />
+          <img src={info?.image} alt='profile' />
         </ProfileImage>
       </UserInfo>
     </Topbar>
