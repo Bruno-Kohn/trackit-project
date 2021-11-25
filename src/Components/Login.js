@@ -19,7 +19,8 @@ export default function Login({ setUser }) {
   const [password, setPassword] = useState('');
   const [clicked, setClicked] = useState(false);
 
-  function login() {
+  function login(e) {
+    e.preventDefault();
     setClicked(true);
     const body = { email, password };
 
@@ -42,27 +43,29 @@ export default function Login({ setUser }) {
         <img src={logo} alt='logo' />
       </Logo>
       <Inputs>
-        <InputForm
-          placeholder='e-mail'
-          type='text'
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          disabled={clicked}
-        ></InputForm>
-        <InputForm
-          placeholder='senha'
-          type='password'
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          disabled={clicked}
-        ></InputForm>
-        <LoginButton onClick={login} disabled={clicked}>
-          {clicked === false ? (
-            'Entrar'
-          ) : (
-            <Loader type='ThreeDots' color='#FFFFFF' height={45} width={60} />
-          )}
-        </LoginButton>
+        <form onSubmit={login}>
+          <InputForm
+            placeholder='e-mail'
+            type='text'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={clicked}
+          ></InputForm>
+          <InputForm
+            placeholder='senha'
+            type='password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            disabled={clicked}
+          ></InputForm>
+          <LoginButton type='submit' disabled={clicked}>
+            {clicked === false ? (
+              'Entrar'
+            ) : (
+              <Loader type='ThreeDots' color='#FFFFFF' height={45} width={60} />
+            )}
+          </LoginButton>
+        </form>
         <Link to='/cadastro'>
           <ToCreateAccount>Não tem uma conta? Cadastre-se!</ToCreateAccount>
         </Link>
