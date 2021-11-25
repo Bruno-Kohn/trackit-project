@@ -21,7 +21,8 @@ export default function Registration() {
   const [image, setImage] = useState('');
   const [clicked, setClicked] = useState(false);
 
-  function registerUser() {
+  function registerUser(e) {
+    e.preventDefault();
     setClicked(true);
     const body = {
       email,
@@ -48,41 +49,43 @@ export default function Registration() {
         <img src={logo} alt='logo' />
       </Logo>
       <Inputs>
-        <InputForm
-          placeholder='e-mail'
-          type='text'
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          disabled={clicked}
-        ></InputForm>
-        <InputForm
-          placeholder='senha'
-          type='password'
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          disabled={clicked}
-        ></InputForm>
-        <InputForm
-          placeholder='nome'
-          type='text'
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          disabled={clicked}
-        ></InputForm>
-        <InputForm
-          placeholder='foto'
-          type='text'
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
-          disabled={clicked}
-        ></InputForm>
-        <LoginButton onClick={registerUser} disabled={clicked}>
-          {clicked === false ? (
-            'Cadastrar'
-          ) : (
-            <Loader type='ThreeDots' color='#FFFFFF' height={45} width={60} />
-          )}
-        </LoginButton>
+        <form onSubmit={registerUser}>
+          <InputForm
+            placeholder='e-mail'
+            type='text'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={clicked}
+          ></InputForm>
+          <InputForm
+            placeholder='senha'
+            type='password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            disabled={clicked}
+          ></InputForm>
+          <InputForm
+            placeholder='nome'
+            type='text'
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            disabled={clicked}
+          ></InputForm>
+          <InputForm
+            placeholder='foto'
+            type='text'
+            value={image}
+            onChange={(e) => setImage(e.target.value)}
+            disabled={clicked}
+          ></InputForm>
+          <LoginButton type='submit' disabled={clicked}>
+            {clicked === false ? (
+              'Cadastrar'
+            ) : (
+              <Loader type='ThreeDots' color='#FFFFFF' height={45} width={60} />
+            )}
+          </LoginButton>
+        </form>
         <Link to='/'>
           <ToCreateAccount>Já tem uma conta? Faça login!</ToCreateAccount>
         </Link>
