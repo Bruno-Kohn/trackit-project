@@ -1,5 +1,6 @@
 import '../styles/reset.css';
 import { FaTrashAlt } from 'react-icons/fa';
+import 'react-circular-progressbar/dist/styles.css';
 import Top from './Top';
 import Bottom from './Bottom';
 import { useState, useContext, useEffect } from 'react';

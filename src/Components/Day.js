@@ -1,6 +1,5 @@
 import { DayWeek } from '../styles/globalStyles.js';
-import { useState } from 'react';
-import { useEffect } from 'react/cjs/react.development';
+import { useState, useEffect } from 'react';
 
 export default function Day({ day, index, selectedDays, setSelectedDays }) {
   const [classSelectedDays, setClassSelectedDays] = useState(false);
