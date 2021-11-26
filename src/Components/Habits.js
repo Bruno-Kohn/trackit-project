@@ -146,8 +146,8 @@ export default function Habits() {
             começar a trackear!
           </NoHabitsAdded>
         ) : (
-          habitsList.map((habit) => (
-            <MyHabit>
+          habitsList.map((habit, index) => (
+            <MyHabit key={index}>
               <MyHabitTop>
                 <HabitTitle>{habit.name}</HabitTitle>
                 <Trash>
