@@ -4,8 +4,9 @@ A simple and straightforward way to organize your tasks and create more and more
 </br>
 </br>
 
-
-<img src="/src/images/trackit-peek.gif"/>
+<p align="center" >
+<img src="/src/images/trackit-peek.gif" height = "600px"/>
+  </p>
 </br>
 </br>
 
