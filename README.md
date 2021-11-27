@@ -1,6 +1,13 @@
 # TrackIt
 
 A simple and straightforward way to organize your tasks and create more and more frequent habits.
+</br>
+</br>
+
+
+<img src="/src/images/trackit-peek.gif"/>
+</br>
+</br>
 
 ## About
 
